@@ -1,7 +1,7 @@
 {
   "configVersion": 1,
-  "timestamp": 1666620737946,
-  "index": "/angular-pwa/index.html",
+  "timestamp": 1666621636733,
+  "index": "/index.html",
   "assetGroups": [
     {
       "name": "app",
@@ -11,13 +11,13 @@
         "ignoreVary": true
       },
       "urls": [
-        "/angular-pwa/favicon.ico",
-        "/angular-pwa/index.html",
-        "/angular-pwa/main.85696fbcc081f129.js",
-        "/angular-pwa/manifest.webmanifest",
-        "/angular-pwa/polyfills.450c9b2831176457.js",
-        "/angular-pwa/runtime.64a4c478f89723db.js",
-        "/angular-pwa/styles.ef46db3751d8e999.css"
+        "/favicon.ico",
+        "/index.html",
+        "/main.3d5933c9c964f0ca.js",
+        "/manifest.webmanifest",
+        "/polyfills.6f533a87f2fb1e02.js",
+        "/runtime.64a4c478f89723db.js",
+        "/styles.ef46db3751d8e999.css"
       ],
       "patterns": []
     },
@@ -29,35 +29,35 @@
         "ignoreVary": true
       },
       "urls": [
-        "/angular-pwa/assets/icons/icon-128x128.png",
-        "/angular-pwa/assets/icons/icon-144x144.png",
-        "/angular-pwa/assets/icons/icon-152x152.png",
-        "/angular-pwa/assets/icons/icon-192x192.png",
-        "/angular-pwa/assets/icons/icon-384x384.png",
-        "/angular-pwa/assets/icons/icon-512x512.png",
-        "/angular-pwa/assets/icons/icon-72x72.png",
-        "/angular-pwa/assets/icons/icon-96x96.png"
+        "/assets/icons/icon-128x128.png",
+        "/assets/icons/icon-144x144.png",
+        "/assets/icons/icon-152x152.png",
+        "/assets/icons/icon-192x192.png",
+        "/assets/icons/icon-384x384.png",
+        "/assets/icons/icon-512x512.png",
+        "/assets/icons/icon-72x72.png",
+        "/assets/icons/icon-96x96.png"
       ],
       "patterns": []
     }
   ],
   "dataGroups": [],
   "hashTable": {
-    "/angular-pwa/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
-    "/angular-pwa/assets/icons/icon-144x144.png": "b0bd89982e08f9bd2b642928f5391915b74799a7",
-    "/angular-pwa/assets/icons/icon-152x152.png": "7479a9477815dfd9668d60f8b3b2fba709b91310",
-    "/angular-pwa/assets/icons/icon-192x192.png": "1abd80d431a237a853ce38147d8c63752f10933b",
-    "/angular-pwa/assets/icons/icon-384x384.png": "329749cd6393768d3131ed6304c136b1ca05f2fd",
-    "/angular-pwa/assets/icons/icon-512x512.png": "559d9c4318b45a1f2b10596bbb4c960fe521dbcc",
-    "/angular-pwa/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
-    "/angular-pwa/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
-    "/angular-pwa/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "/angular-pwa/index.html": "77bc7e43e402cda730a2d4dec7c1ea85516d45df",
-    "/angular-pwa/main.85696fbcc081f129.js": "6eff4c205229c3d7dda467baaeb14cc87670f02c",
-    "/angular-pwa/manifest.webmanifest": "647db4fba4be264d65d1cbc9d3c6606d05610dcf",
-    "/angular-pwa/polyfills.450c9b2831176457.js": "7c3ac593c7c18e883209c040210bf630fe6531b9",
-    "/angular-pwa/runtime.64a4c478f89723db.js": "49fa9038357f3db0130e1219265c8b5582c37349",
-    "/angular-pwa/styles.ef46db3751d8e999.css": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+    "/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
+    "/assets/icons/icon-144x144.png": "b0bd89982e08f9bd2b642928f5391915b74799a7",
+    "/assets/icons/icon-152x152.png": "7479a9477815dfd9668d60f8b3b2fba709b91310",
+    "/assets/icons/icon-192x192.png": "1abd80d431a237a853ce38147d8c63752f10933b",
+    "/assets/icons/icon-384x384.png": "329749cd6393768d3131ed6304c136b1ca05f2fd",
+    "/assets/icons/icon-512x512.png": "559d9c4318b45a1f2b10596bbb4c960fe521dbcc",
+    "/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
+    "/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
+    "/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
+    "/index.html": "5d526e0ba2f7bb2ea615e01f72e1eb7f4f72bd2d",
+    "/main.3d5933c9c964f0ca.js": "75d65483e32cd262d3a617b5d395109142898f7d",
+    "/manifest.webmanifest": "a299205e63ae117f6e70f894c6bc60763da4cc19",
+    "/polyfills.6f533a87f2fb1e02.js": "4545ec056d11ed4faa904f37759d75ae1659abc2",
+    "/runtime.64a4c478f89723db.js": "49fa9038357f3db0130e1219265c8b5582c37349",
+    "/styles.ef46db3751d8e999.css": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
   },
   "navigationUrls": [
     {
