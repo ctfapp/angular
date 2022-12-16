@@ -1,9 +1,20 @@
 // This file can be replaced during build by using the `fileReplacements` array.
-// `ng build` replaces `environment.ts` with `environment.prod.ts`.
+// `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+    production: false,
+    
+    api: {
+        auth:{
+            url:'https://localhost:7215',
+        },
+        sales: {
+            search : 'https://sicgo.decisor.com/esb/v1/elasticsearch/search/nav_%2A_vendas/navigator',
+            //msearch : 'https://sicgo.decisor.com/esb/v1/elasticsearch/msearch/nav_%2A_vendas/navigator'
+            msearch : 'https://sicgo.decisor.com/esb/v1/elasticsearch/msearchh/nav_%2A_vendas/navigator'
+        }
+    }
 };
 
 /*
