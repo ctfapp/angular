@@ -1,0 +1,57 @@
+{
+    "welcome-back": "Welcome back",
+    "Project": "Project",
+	"Analytics": "Analytics",
+    
+    "Sales": "Sales",
+    "Total": "Total",
+	"Items": "Items",
+    "Item": "Item",
+    "Services": "Services",
+    "Service": "Service",
+    "Market": "Market",
+    "Internal": "Internal",
+    "External": "External",
+    "Community": "Community",
+	
+	"Top Performance": "Top Performance",
+	"Top-performance-secondary" : "Sorted sales by net value, gross margin and quantities.",
+	"Clear": "Clear",
+	"Client": "Client",
+	"Totalizing-Family": "Totalizing Family",
+	"Movement-Family": "Movement Family",
+	"Brand": "Brand",
+	"Seller": "Seller",
+	
+	"Net Value": "Net Value",
+	"Net-Value-section-secondary": "Top sales and their margins by net value.",
+	"Gross Margin": "Gross Margin",
+	"Gross-margin-section-secondary": "Top sales by gross margin.",
+	"Quantity":"Quantity",
+	"Quantities":"Quantities",
+	"Quantities-section-secondary": "Top sales by quantity.",
+
+    "Filter": "Filter",
+    "Company": "Company",
+    "Activity": "Activity",
+    "Group": "Group",
+    "Not-group": "Not Group",
+	"Currency": "Currency",
+	"Date": "Date",
+	"Filter-for": "Filter For",
+	"Filter-out": "Filter Out",
+
+    "Percentage": "Percentage",
+	
+	"Settings":"Settings",
+	"Profile-section-secondary":"Profile information",
+	"Name": "Name",
+	"Username": "Username",
+	"Company": "Company",
+	
+	"Personal Information": "Personal Information",
+	"Personal-information-section-secondary":"Communication details in case we want to connect with you.",
+	"Phone":"Phone",
+	"Country":"Country",
+	"Language": "Language"
+}

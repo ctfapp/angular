@@ -1,0 +1,743 @@
+
+<div class="flex flex-col flex-auto w-full">
+
+    <div class="flex flex-wrap w-full max-w-screen-xl mx-auto">
+
+        <!-- Title and action buttons -->
+        <div class="grid lg:grid-cols-2 sm:grid-cols-1 gap-4 flex items-center justify-between w-full">
+            <!-- Title -->
+            <div class="lg:text-left sm:text-justify">
+                <div class="text-2xl font-semibold tracking-tight leading-8">
+                    <ng-container *transloco="let t">
+                        {{t('Top Performance')}}
+                    </ng-container>
+                </div>
+                <div class="font-medium tracking-tight text-secondary">
+                    <ng-container *transloco="let t">
+                        {{t('Top-performance-secondary')}}
+                    </ng-container>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="text-right">
+                <div>
+                    <button
+                        class="ml-3"
+                        mat-flat-button
+                        matTooltip="Select Dimension"
+                        [color]="'primary'"
+                        [matMenuTriggerFor]="collectionMenu">
+                        <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:collection'"></mat-icon>
+                            <span class="ml-2">
+                                <ng-container *transloco="let t">
+                                    {{t( combination.dimension.display )}}
+                                </ng-container>
+                            </span>
+                    </button>
+                    <mat-menu #collectionMenu="matMenu">
+                        <button mat-menu-item (click)="setDimension('NomeCliente', 'Client')"><ng-container *transloco="let t">{{t('Client')}}</ng-container></button>
+                        <button mat-menu-item (click)="setDimension('NomeFamiliaNivel_1','Totalizing-Family')"><ng-container *transloco="let t">{{t('Totalizing-Family')}}</ng-container></button>
+                        <button mat-menu-item (click)="setDimension('NomeFamiliaNivel_0','Movement-Family')"><ng-container *transloco="let t">{{t('Movement-Family')}}</ng-container></button>
+                        <button mat-menu-item (click)="setDimension('NomeMarca','Brand')"><ng-container *transloco="let t">{{t('Brand')}}</ng-container></button>
+                        <button mat-menu-item (click)="setDimension('NomeArtigoServico','Item')"><ng-container *transloco="let t">{{t('Item')}}</ng-container></button>
+                        <button mat-menu-item (click)="setDimension('NomeArtigoServico','Service')"><ng-container *transloco="let t">{{t('Service')}}</ng-container></button>
+                        <button mat-menu-item (click)="setDimension('NomeVendedor','Seller')"><ng-container *transloco="let t">{{t('Seller')}}</ng-container></button>
+                        <button mat-menu-item (click)="setDimension('NomeMercado','Market')"><ng-container *transloco="let t">{{t('Market')}}</ng-container></button>
+                        <button mat-menu-item (click)="setDimension('NomePais','Country')"><ng-container *transloco="let t">{{t('Country')}}</ng-container></button>
+                    </mat-menu>
+
+                    <button
+                        class="ml-3"
+                        mat-flat-button
+                        matTooltip="Select Top Limit"
+                        [color]="'accent'"
+                        [matMenuTriggerFor]="topMenu">
+                        <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:sort-descending'"></mat-icon>
+                            <span class="ml-2">Top {{ combination.top }}</span>
+                    </button>
+                    <mat-menu #topMenu="matMenu">
+                        <button mat-menu-item (click)="setTop('10')">Top 10</button>
+                        <button mat-menu-item (click)="setTop('20')">Top 20</button>
+                        <button mat-menu-item (click)="setTop('50')">Top 50</button>
+                    </mat-menu>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chip Menu -->
+        <div class="grid lg:grid-cols-4 sm:grid-cols-3 gap-4 mt-8 flex items-center justify-between w-full">
+            <!-- Chip List -->
+            <div class="lg:col-span-3 sm:col-span-2 text-left">
+                <mat-chip-list
+                    #customFilter>
+                    <mat-chip 
+                        *ngFor="let tag of getTopFilters()"
+                        class="text-left text-xs cursor-pointer"
+                        [ngStyle]="{'color': isFilterFor(tag) ? 
+                            'var(--fuse-primary)' : 'var(--fuse-warn)' }"
+                        [removable]="true"
+                        [selectable]="true"
+                        (removed)="removeTagFilter(tag)"
+                        (click)="toggleTagStatus(tag)"
+                        [matTooltip]="tag.filterStatus === _FilterStatus.FOR ?
+                            'Filter Out' : 'Filter For'"
+                        >
+                        {{tag.name}}
+                        <mat-icon
+                            class="icon-size-5"
+                            matChipRemove
+                            [svgIcon]="'heroicons_solid:minus-circle'"
+                            matTooltip="Remove filter"></mat-icon>
+                    </mat-chip>
+                <!--
+                    <input
+                        [placeholder]="'Filter...'"
+                        [matChipInputFor]="customFilter">
+                -->
+                </mat-chip-list>
+            </div>
+            <!-- Clear button -->
+            <div class="col-span-1 text-right">
+                <button
+                    *ngIf="isFiltered()"
+                    mat-stroked-button
+                    matTooltip="Clear Selection"
+                    [color]="'accent'"
+                    (click)="resetFilter()">
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:x-circle'"></mat-icon>
+                        <span class="ml-2">
+                            <ng-container *transloco="let t">
+                                {{t( 'Clear' )}}
+                            </ng-container>
+                        </span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Section title -->
+        <div class="w-full mt-8">
+            <div class="text-2xl font-semibold tracking-tight leading-6">
+                <ng-container *transloco="let t">
+                    {{t('Net Value')}}
+                </ng-container>
+            </div>
+            <div class="font-medium tracking-tight text-secondary">
+                <ng-container *transloco="let t">
+                    {{t('Net-Value-section-secondary')}}
+                </ng-container>
+            </div>
+        </div>
+
+        <!-- Net Value -->
+        <div class="flex flex-col flex-auto mt-8 bg-card shadow rounded-2xl overflow-hidden">
+            <!--
+            <div class="flex items-start justify-between m-6 mb-0">
+                <div class="text-lg font-medium tracking-tight leading-6 truncate">Net Value</div>
+            </div>
+            -->
+            <!--
+            <div class="flex items-start mt-6 mx-6">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12">
+                    <div class="flex flex-col">
+                        <div class="flex items-center">
+                            <div class="font-medium text-secondary leading-5">Overall Score</div>
+                        </div>
+                        <div class="flex items-start mt-2">
+                            <div class="text-4xl font-bold tracking-tight leading-none">472</div>
+                            <div class="flex items-center ml-2">
+                                <mat-icon
+                                    class="icon-size-5 text-green-500"
+                                    [svgIcon]="'heroicons_solid:arrow-circle-up'"></mat-icon>
+                                <div class="ml-1 text-md font-medium text-green-500">42.9%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex items-center">
+                            <div class="font-medium text-secondary leading-5">Average Ratio</div>
+                        </div>
+                        <div class="flex items-start mt-2">
+                            <div class="text-4xl font-bold tracking-tight leading-none">45%</div>
+                            <div class="flex items-center ml-2">
+                                <mat-icon
+                                    class="icon-size-5 text-red-500"
+                                    [svgIcon]="'heroicons_solid:arrow-circle-down'"></mat-icon>
+                                <div class="ml-1 text-md font-medium text-red-500">13.1%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex items-center">
+                            <div class="font-medium text-secondary leading-5">Predicted Ratio</div>
+                        </div>
+                        <div class="flex items-start mt-2">
+                            <div class="text-4xl font-bold tracking-tight leading-none">55%</div>
+                            <div class="flex items-center ml-2">
+                                <mat-icon
+                                    class="icon-size-5 text-green-500"
+                                    [svgIcon]="'heroicons_solid:arrow-circle-up'"></mat-icon>
+                                <div class="ml-1 text-md font-medium text-green-500">22.2%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            -->
+            <div class="flex flex-col flex-auto h-auto mt-3">
+                <div class="flex flex-col flex-auto p-2">
+                    <apx-chart #chartNetValue
+                        class="flex-auto w-full h-full"
+                        [chart]="chartNetValueOp.chart"
+                        [colors]="chartNetValueOp.colors"
+                        [dataLabels]="chartNetValueOp.dataLabels"
+                        [fill]="chartNetValueOp.fill"
+                        [grid]="chartNetValueOp.grid"
+                        [legend]="chartNetValueOp.legend"
+                        [plotOptions]="chartNetValueOp.plotOptions"
+                        [series]="chartNetValueOp.series"
+                        [stroke]="chartNetValueOp.stroke"
+                        [tooltip]="chartNetValueOp.tooltip"
+                        [xaxis]="chartNetValueOp.xaxis"
+                        [yaxis]="chartNetValueOp.yaxis"
+                        [responsive]="chartNetValueOp.responsive"></apx-chart>
+                </div>
+            </div>
+            <div class="flex flex-col flex-auto h-full mt-3">
+                <table
+                    class="table-auto overflow-y-visible"
+                    mat-table
+                    [dataSource]="tableNetValue['datasource']['rows']">
+
+                    <ng-container
+                        matColumnDef="Dimension"
+                        sticky>
+                        <th mat-header-cell *matHeaderCellDef>
+                            <ng-container *transloco="let t">
+                                {{t(combination.dimension.display)}}
+                            </ng-container>
+                        </th>
+                        <td
+                            mat-cell
+                            *matCellDef="let tag">
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4 break-words"
+                                [ngStyle]="{'color':this.config.colors.dark}">{{tag.name}}</span>
+                            </span>
+                        </td>
+                        <td mat-footer-row *matFooterCellDef>
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4 pl-6 font-medium">Total</span>
+                            </span>
+                        </td>
+                    </ng-container>
+                    
+                    <ng-container
+                        matColumnDef="Net Value"
+                        sticky>
+                        <th mat-header-cell *matHeaderCellDef>
+                            <ng-container *transloco="let t">
+                                {{t('Net Value')}}
+                            </ng-container>
+                        </th>
+                        <td
+                            mat-cell
+                            *matCellDef="let tag">
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4"
+                                [ngStyle]="{'color':this.config.colors.dark}">{{tag.value}}</span>
+                            </span>
+                        </td>
+                        <td mat-footer-row *matFooterCellDef>
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4 font-medium">{{totalNetValue}}</span>
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container
+                        matColumnDef="%"
+                        sticky>
+                        <th mat-header-cell *matHeaderCellDef>
+                            %
+                        </th>
+                        <td
+                            mat-cell
+                            *matCellDef="let tag">
+                            <span class="flex items-center">
+                                <span>
+                                    <span
+                                        class="flex items-end w-1 h-4 bg-red-200 rounded overflow-hidden"
+                                        *ngIf="tag.prop.percentage_value < 5">
+                                        <span class="flex w-full h-1/3 bg-red-600"></span>
+                                    </span>
+                                    <span
+                                        class="flex items-end w-1 h-4 bg-orange-200 rounded overflow-hidden"
+                                        *ngIf="tag.prop.percentage_value >= 5 && tag.prop.percentage_value < 10">
+                                        <span class="flex w-full h-2/4 bg-orange-400"></span>
+                                    </span>
+                                    <span
+                                        class="flex items-end w-1 h-4 bg-green-100 rounded overflow-hidden"
+                                        *ngIf="tag.prop.percentage_value >= 10">
+                                        <span class="flex w-full h-full bg-green-400"></span>
+                                    </span>
+                                </span>
+                                <span class="ml-3 leading-4"
+                                [ngStyle]="{'color':this.config.colors.dark}">{{tag.prop.percentage}}</span>
+                            </span>
+                        </td>
+                        <td mat-footer-row *matFooterCellDef>
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4 font-medium">{{totalNetValuePercentage}}</span>
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container
+                        matColumnDef="Options"
+                        stickyEnd>
+                        <th mat-header-cell *matHeaderCellDef>
+                            <ng-container *transloco="let t">
+                                {{t('Filter')}}
+                            </ng-container>
+                        </th>
+                        <td
+                            mat-cell
+                            *matCellDef="let tag">
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4"
+                                    [ngStyle]="{'color':this.config.colors.dark}">
+                                    <button
+                                    mat-icon-button
+                                    [matMenuTriggerFor]="summaryMenu">
+                                    <mat-icon
+                                        class="icon-size-5"
+                                        [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+                                    </button>
+                                    <mat-menu #summaryMenu="matMenu">
+                                        <button
+                                        mat-menu-item
+                                        [class.text-primary]="isFilterFor(tag)"
+                                        (click)="setFilterFor(tag)"
+                                        ><ng-container *transloco="let t">
+                                            {{t('Filter-for')}}
+                                        </ng-container></button>
+                                        <button
+                                        mat-menu-item
+                                        [class.text-warn]="isFilterOut(tag)"
+                                        (click)="setFilterOut(tag)"
+                                        ><ng-container *transloco="let t">
+                                            {{t('Filter-out')}}
+                                        </ng-container></button>
+                                    </mat-menu>
+                                </span>
+                            </span>
+                        </td>
+                        <td mat-footer-row *matFooterCellDef>
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4 font-medium"></span>
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <tr
+                        mat-header-row
+                        *matHeaderRowDef="tableNetValue['datasource']['columns']"></tr>
+                    <tr
+                        mat-row
+                        *matRowDef="let row; columns: tableNetValue['datasource']['columns'];"
+                        class="w-2 h-8 rounded-full hover:bg-primary-100"
+                        [ngStyle]="{'background-color': row.color}"
+                        [matTooltip]="row.tooltip"></tr>
+                    <tr 
+                        mat-footer-row
+                        *matFooterRowDef="tableNetValue['datasource']['columns']"></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section title -->
+        <div class="w-full mt-8">
+            <div class="text-2xl font-semibold tracking-tight leading-6">
+                <ng-container *transloco="let t">
+                    {{t('Gross Margin')}}
+                </ng-container>
+            </div>
+            <div class="font-medium tracking-tight text-secondary">
+                <ng-container *transloco="let t">
+                    {{t('Gross-margin-section-secondary')}}
+                </ng-container>
+            </div>
+        </div>
+
+        <!-- Gross Margin -->
+        <div class="flex flex-col flex-auto mt-8 bg-card shadow rounded-2xl overflow-hidden">
+            <div class="flex flex-col flex-auto h-auto mt-3">
+                <div class="flex flex-col flex-auto p-2">
+                    <apx-chart #chartGrossMargin
+                        class="flex-auto w-full h-full"
+                        [chart]="chartGrossMarginOp.chart"
+                        [colors]="chartGrossMarginOp.colors"
+                        [dataLabels]="chartGrossMarginOp.dataLabels"
+                        [fill]="chartGrossMarginOp.fill"
+                        [grid]="chartGrossMarginOp.grid"
+                        [legend]="chartGrossMarginOp.legend"
+                        [plotOptions]="chartGrossMarginOp.plotOptions"
+                        [series]="chartGrossMarginOp.series"
+                        [stroke]="chartGrossMarginOp.stroke"
+                        [tooltip]="chartGrossMarginOp.tooltip"
+                        [xaxis]="chartGrossMarginOp.xaxis"
+                        [yaxis]="chartGrossMarginOp.yaxis"
+                        [responsive]="chartGrossMarginOp.responsive"></apx-chart>
+                </div>
+            </div>
+            <div class="flex flex-col flex-auto h-full mt-3">
+                <table
+                    class="table-auto overflow-y-visible"
+                    mat-table
+                    [dataSource]="tableGrossMargin['datasource']['rows']">
+
+                    <ng-container
+                        matColumnDef="Dimension"
+                        sticky>
+                        <th mat-header-cell *matHeaderCellDef>
+                            <ng-container *transloco="let t">
+                                {{t(combination.dimension.display)}}
+                            </ng-container>
+                        </th>
+                        <td
+                            mat-cell
+                            *matCellDef="let tag">
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4 break-words"
+                                [ngStyle]="{'color':this.config.colors.dark}">{{tag.name}}</span>
+                            </span>
+                        </td>
+                        <td mat-footer-row *matFooterCellDef>
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4 pl-6 font-medium">Total</span>
+                            </span>
+                        </td>
+                    </ng-container>
+                    
+                    <ng-container
+                        matColumnDef="Gross Margin"
+                        sticky>
+                        <th mat-header-cell *matHeaderCellDef>
+                            <ng-container *transloco="let t">
+                                {{t('Gross Margin')}}
+                            </ng-container>
+                        </th>
+                        <td
+                            mat-cell
+                            *matCellDef="let tag">
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4"
+                                [ngStyle]="{'color':this.config.colors.dark}">{{tag.value}}</span>
+                            </span>
+                        </td>
+                        <td mat-footer-row *matFooterCellDef>
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4 font-medium">{{totalGrossMargin}}</span>
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container
+                        matColumnDef="%"
+                        sticky>
+                        <th mat-header-cell *matHeaderCellDef>
+                            %
+                        </th>
+                        <td
+                            mat-cell
+                            *matCellDef="let tag">
+                            <span class="flex items-center">
+                                <span>
+                                    <span
+                                        class="flex items-end w-1 h-4 bg-red-200 rounded overflow-hidden"
+                                        *ngIf="tag.prop.percentage_value < 5">
+                                        <span class="flex w-full h-1/3 bg-red-600"></span>
+                                    </span>
+                                    <span
+                                        class="flex items-end w-1 h-4 bg-orange-200 rounded overflow-hidden"
+                                        *ngIf="tag.prop.percentage_value >= 5 && tag.prop.percentage_value < 10">
+                                        <span class="flex w-full h-2/4 bg-orange-400"></span>
+                                    </span>
+                                    <span
+                                        class="flex items-end w-1 h-4 bg-green-100 rounded overflow-hidden"
+                                        *ngIf="tag.prop.percentage_value >= 10">
+                                        <span class="flex w-full h-full bg-green-400"></span>
+                                    </span>
+                                </span>
+                                <span class="ml-3 leading-4"
+                                [ngStyle]="{'color':this.config.colors.dark}">{{tag.prop.percentage}}</span>
+                            </span>
+                        </td>
+                        <td mat-footer-row *matFooterCellDef>
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4 font-medium">{{totalGrossMarginPercentage}}</span>
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container
+                        matColumnDef="Options"
+                        stickyEnd>
+                        <th mat-header-cell *matHeaderCellDef>
+                            <ng-container *transloco="let t">
+                                {{t('Filter')}}
+                            </ng-container>
+                        </th>
+                        <td
+                            mat-cell
+                            *matCellDef="let tag">
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4"
+                                    [ngStyle]="{'color':this.config.colors.dark}">
+                                    <button
+                                    mat-icon-button
+                                    [matMenuTriggerFor]="summaryMenu">
+                                    <mat-icon
+                                        class="icon-size-5"
+                                        [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+                                    </button>
+                                    <mat-menu #summaryMenu="matMenu">
+                                        <button
+                                        mat-menu-item
+                                        [class.text-primary]="isFilterFor(tag)"
+                                        (click)="setFilterFor(tag)"
+                                        ><ng-container *transloco="let t">
+                                            {{t('Filter-for')}}
+                                        </ng-container></button>
+                                        <button
+                                        mat-menu-item
+                                        [class.text-warn]="isFilterOut(tag)"
+                                        (click)="setFilterOut(tag)"
+                                        ><ng-container *transloco="let t">
+                                            {{t('Filter-out')}}
+                                        </ng-container></button>
+                                    </mat-menu>
+                                </span>
+                            </span>
+                        </td>
+                        <td mat-footer-row *matFooterCellDef>
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4 font-medium"></span>
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <tr
+                        mat-header-row
+                        *matHeaderRowDef="tableGrossMargin['datasource']['columns']"></tr>
+                    <tr
+                        mat-row
+                        *matRowDef="let row; columns: tableGrossMargin['datasource']['columns'];"
+                        class="w-2 h-8 rounded-full hover:bg-primary-100"
+                        [ngStyle]="{'background-color': row.color}"
+                        [matTooltip]="row.tooltip"></tr>
+                    <tr 
+                        mat-footer-row
+                        *matFooterRowDef="tableGrossMargin['datasource']['columns']"></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section title -->
+        <div class="w-full mt-8">
+            <div class="text-2xl font-semibold tracking-tight leading-6">
+                <ng-container *transloco="let t">
+                    {{t('Quantities')}}
+                </ng-container>
+            </div>
+            <div class="font-medium tracking-tight text-secondary">
+                <ng-container *transloco="let t">
+                    {{t('Quantities-section-secondary')}}
+                </ng-container>
+            </div>
+        </div>
+
+        <!-- Quantities -->
+        <div class="flex flex-col flex-auto mt-8 bg-card shadow rounded-2xl overflow-hidden">
+            <div class="flex flex-col flex-auto h-auto mt-3">
+                <div class="flex flex-col flex-auto p-2">
+                    <apx-chart #chartQuantity
+                        class="flex-auto w-full h-full"
+                        [chart]="chartQuantityOp.chart"
+                        [colors]="chartQuantityOp.colors"
+                        [dataLabels]="chartQuantityOp.dataLabels"
+                        [fill]="chartQuantityOp.fill"
+                        [grid]="chartQuantityOp.grid"
+                        [legend]="chartQuantityOp.legend"
+                        [plotOptions]="chartQuantityOp.plotOptions"
+                        [series]="chartQuantityOp.series"
+                        [stroke]="chartQuantityOp.stroke"
+                        [tooltip]="chartQuantityOp.tooltip"
+                        [xaxis]="chartQuantityOp.xaxis"
+                        [yaxis]="chartQuantityOp.yaxis"
+                        [responsive]="chartQuantityOp.responsive"></apx-chart>
+                </div>
+            </div>
+            <div class="flex flex-col flex-auto h-full mt-3">
+                <table
+                    class="table-auto overflow-y-visible"
+                    mat-table
+                    [dataSource]="tableQuantity['datasource']['rows']">
+
+                    <ng-container
+                        matColumnDef="Dimension"
+                        sticky>
+                        <th mat-header-cell *matHeaderCellDef>
+                            <ng-container *transloco="let t">
+                                {{t(combination.dimension.display)}}
+                            </ng-container>
+                        </th>
+                        <td
+                            mat-cell
+                            *matCellDef="let tag">
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4 break-words"
+                                [ngStyle]="{'color':this.config.colors.dark}">{{tag.name}}</span>
+                            </span>
+                        </td>
+                        <td mat-footer-row *matFooterCellDef>
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4 pl-6 font-medium">Total</span>
+                            </span>
+                        </td>
+                    </ng-container>
+                    
+                    <ng-container
+                        matColumnDef="Quantity"
+                        sticky>
+                        <th mat-header-cell *matHeaderCellDef>
+                            <ng-container *transloco="let t">
+                                {{t('Quantity')}}
+                            </ng-container>
+                        </th>
+                        <td
+                            mat-cell
+                            *matCellDef="let tag">
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4"
+                                [ngStyle]="{'color':this.config.colors.dark}">{{tag.value}}</span>
+                            </span>
+                        </td>
+                        <td mat-footer-row *matFooterCellDef>
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4 font-medium">{{totalQuantity}}</span>
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container
+                        matColumnDef="%"
+                        sticky>
+                        <th mat-header-cell *matHeaderCellDef>
+                            %
+                        </th>
+                        <td
+                            mat-cell
+                            *matCellDef="let tag">
+                            <span class="flex items-center">
+                                <span>
+                                    <span
+                                        class="flex items-end w-1 h-4 bg-red-200 rounded overflow-hidden"
+                                        *ngIf="tag.prop.percentage_value < 5">
+                                        <span class="flex w-full h-1/3 bg-red-600"></span>
+                                    </span>
+                                    <span
+                                        class="flex items-end w-1 h-4 bg-orange-200 rounded overflow-hidden"
+                                        *ngIf="tag.prop.percentage_value >= 5 && tag.prop.percentage_value < 10">
+                                        <span class="flex w-full h-2/4 bg-orange-400"></span>
+                                    </span>
+                                    <span
+                                        class="flex items-end w-1 h-4 bg-green-100 rounded overflow-hidden"
+                                        *ngIf="tag.prop.percentage_value >= 10">
+                                        <span class="flex w-full h-full bg-green-400"></span>
+                                    </span>
+                                </span>
+                                <span class="ml-3 leading-4"
+                                [ngStyle]="{'color':this.config.colors.dark}">{{tag.prop.percentage}}</span>
+                            </span>
+                        </td>
+                        <td mat-footer-row *matFooterCellDef>
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4 font-medium">{{totalQuantityPercentage}}</span>
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container
+                        matColumnDef="Options"
+                        stickyEnd>
+                        <th mat-header-cell *matHeaderCellDef>
+                            <ng-container *transloco="let t">
+                                {{t('Filter')}}
+                            </ng-container>
+                        </th>
+                        <td
+                            mat-cell
+                            *matCellDef="let tag">
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4"
+                                    [ngStyle]="{'color':this.config.colors.dark}">
+                                    <button
+                                    mat-icon-button
+                                    [matMenuTriggerFor]="summaryMenu">
+                                    <mat-icon
+                                        class="icon-size-5"
+                                        [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+                                    </button>
+                                    <mat-menu #summaryMenu="matMenu">
+                                        <button
+                                        mat-menu-item
+                                        [class.text-primary]="isFilterFor(tag)"
+                                        (click)="setFilterFor(tag)"
+                                        ><ng-container *transloco="let t">
+                                            {{t('Filter-for')}}
+                                        </ng-container></button>
+                                        <button
+                                        mat-menu-item
+                                        [class.text-warn]="isFilterOut(tag)"
+                                        (click)="setFilterOut(tag)"
+                                        ><ng-container *transloco="let t">
+                                            {{t('Filter-out')}}
+                                        </ng-container></button>
+                                    </mat-menu>
+                                </span>
+                            </span>
+                        </td>
+                        <td mat-footer-row *matFooterCellDef>
+                            <span class="flex items-center">
+                                <span class="ml-1 leading-4 font-medium"></span>
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <tr
+                        mat-header-row
+                        *matHeaderRowDef="tableQuantity['datasource']['columns']"></tr>
+                    <tr
+                        mat-row
+                        *matRowDef="let row; columns: tableQuantity['datasource']['columns'];"
+                        class="w-2 h-8 rounded-full hover:bg-primary-100"
+                        [ngStyle]="{'background-color': row.color}"
+                        [matTooltip]="row.tooltip"></tr>
+                    <tr 
+                        mat-footer-row
+                        *matFooterRowDef="tableQuantity['datasource']['columns']"></tr>
+                </table>
+            </div>
+        </div>
+        
+    </div>
+
+</div>

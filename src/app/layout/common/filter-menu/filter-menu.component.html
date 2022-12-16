@@ -1,0 +1,630 @@
+<div
+    matTooltip="Open Filter"
+    class="fixed flex items-center justify-center right-0 w-12 h-12 shadow-lg rounded-l-lg lg:rounded-lg z-90 cursor-pointer bg-primary-600 bg-opacity-90 print:hidden"
+    [class.lg:right-0]="config.layout === 'centered' || config.layout === 'material'"
+    [class.lg:right-16]="config.layout !== 'centered' && config.layout !== 'material'"
+    style="top: 90%"
+    (click)="settingsDrawer.toggle()">
+    <mat-icon
+        class="icon-size-5 text-white"
+        [svgIcon]="'heroicons_solid:filter'"></mat-icon>
+</div>
+
+<fuse-drawer
+    class="w-screen min-w-screen sm:w-100 sm:min-w-100 z-999"
+    fixed
+    [opened]="drawerOpened"
+    [mode]="'over'"
+    [name]="'settingsDrawer'"
+    [position]="'right'"
+    #settingsDrawer>
+
+    <div class="flex flex-col w-full overflow-auto bg-card">
+        <div class="flex flex-row items-center px-6 h-20 min-h-20 text-white bg-primary">
+            <mat-icon
+                class="icon-size-7 text-current"
+                [svgIcon]="'heroicons_solid:filter'"></mat-icon>
+            <div class="ml-3 text-2xl font-semibold tracking-tight">
+                <ng-container *transloco="let t">
+                    {{t('Filter')}}
+                </ng-container>
+            </div>
+            <button
+                class="ml-auto"
+                mat-icon-button
+                (click)="settingsDrawer.close()">
+                <mat-icon
+                    class="text-current"
+                    [svgIcon]="'heroicons_outline:x'"></mat-icon>
+            </button>
+        </div>
+
+        <div class="flex flex-col p-6">
+            
+            <!-- Company -->
+            <div class="text-md font-semibold text-secondary">
+                <ng-container *transloco="let t">
+                    {{t('Company') | uppercase}}
+                </ng-container>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-2 gap-3 mt-6">
+                <ng-container *ngFor="let tag of filterTags['Company']">
+                    <div
+                        class="flex items-center py-3 pl-5 pr-6 rounded-full cursor-pointer ring-inset ring-primary bg-hover"
+                        [class.ring-2]="isFilterFor(tag) || isFilterOut(tag)"
+                        [class.ring-primary]="isFilterFor(tag)"
+                        [class.ring-warn]="isFilterOut(tag)"
+                        matTooltip='{{tag.value | titlecase}}'
+                        [ngClass]="'theme-default'"
+                        [matMenuTriggerFor]="filterMenu">
+                        <mat-icon
+                         [ngStyle]="{'color':config.colors['chart'][1]}"
+                         svgIcon="mat_outline:business">
+                        </mat-icon>
+                        <div
+                            class="flex items-center ml-2 break-all font-medium leading-5"
+                            [class.text-primary]="isFilterFor(tag)"
+                            [class.text-warn]="isFilterOut(tag)">
+                            <ng-container *transloco="let t">
+                                {{tag.value | titlecase}}
+                            </ng-container>
+                        </div>
+                        <mat-menu #filterMenu="matMenu">
+                            <button
+                                mat-menu-item
+                                class="break-words font-medium leading-5"
+                                [class.text-primary]="isFilterFor(tag)"
+                                (click)="setFilterFor(tag)">
+                                <ng-container *transloco="let t">
+                                    {{t('Filter-for')}}
+                                </ng-container>
+                            </button>
+                            <button
+                                mat-menu-item
+                                class="break-words font-medium leading-5"
+                                [class.text-warn]="isFilterOut(tag)"
+                                (click)="setFilterOut(tag)">
+                                <ng-container *transloco="let t">
+                                    {{t('Filter-out')}}
+                                </ng-container>
+                            </button>
+                            <button
+                                mat-menu-item
+                                class="break-words font-medium leading-5"
+                                (click)="removeTag(tag)">
+                                <ng-container *transloco="let t">
+                                    {{t('Clear')}}
+                                </ng-container>
+                            </button>
+                        </mat-menu>
+                    </div>
+                    
+                </ng-container>
+                
+                
+                <!--
+                <ng-container *ngFor="let comp of filterValues['Company']">
+                    <div
+                        class="grid grid-cols-4 gap-1 items-center justify-left px-4 py-3 rounded-full ring-inset bg-hover"
+                        [class.ring-2]="filter['custom'].includes('NomeEmpresa:'+comp) || filter['custom'].includes('NOT NomeEmpresa:'+comp)"
+                        [class.ring-primary]="filter['custom'].includes('NomeEmpresa:'+comp)"
+                        [class.ring-warn]="filter['custom'].includes('NOT NomeEmpresa:'+comp)"
+                        matTooltip='{{comp | titlecase}}'
+                        [ngClass]="'theme-default'"
+                        >
+                        
+                        <div
+                            class="col-span-3 ml-2.5 break-words font-medium leading-5"
+                            [class.text-primary]="filter['custom'].includes('NomeEmpresa:'+comp)"
+                            [class.text-warn]="filter['custom'].includes('NOT NomeEmpresa:'+comp)">
+                            {{comp | titlecase}}
+                        </div>
+                        
+                        <div>
+                            <button
+                                mat-icon-button
+                                [matMenuTriggerFor]="summaryMenu">
+                                <mat-icon
+                                    class="icon-size-5"
+                                    [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+                            </button>
+                            <mat-menu #summaryMenu="matMenu">
+                                <button
+                                mat-menu-item
+                                [class.text-primary]="filter['custom'].includes('NomeEmpresa:'+comp)"
+                                (click)="setCustom('NomeEmpresa:'+comp)"
+                                ><ng-container *transloco="let t">
+                                    {{t('Filter-for')}}
+                                </ng-container>
+                                </button>
+                                <button
+                                mat-menu-item
+                                [class.text-warn]="filter['custom'].includes('NOT NomeEmpresa:'+comp)"
+                                (click)="setCustom('NOT NomeEmpresa:'+comp)"
+                                ><ng-container *transloco="let t">
+                                    {{t('Filter-out')}}
+                                </ng-container>
+                                </button>
+                            </mat-menu>
+                        </div>
+
+                    </div>
+                </ng-container>
+                -->
+            </div>
+            
+            <hr class="my-8">
+
+            <!-- Activity -->
+            <div class="text-md font-semibold text-secondary">
+                <ng-container *transloco="let t">
+                    {{t('Activity') | uppercase}}
+                </ng-container>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-2 gap-3 mt-6">    
+                
+                <ng-container *ngFor="let tag of filterTags['Activity']">
+                    <div
+                        class="flex items-center py-3 pl-5 pr-6 rounded-full cursor-pointer ring-inset ring-primary bg-hover"
+                        [class.ring-2]="isFilterFor(tag) || isFilterOut(tag)"
+                        [class.ring-primary]="isFilterFor(tag)"
+                        [class.ring-warn]="isFilterOut(tag)"
+                        matTooltip='{{tag.value | titlecase}}'
+                        [ngClass]="'theme-default'"
+                        [matMenuTriggerFor]="filterMenu">
+                        <mat-icon
+                         [ngStyle]="{'color':config.colors['chart'][7]}"
+                         svgIcon="mat_outline:cases">
+                        </mat-icon>
+                        <div
+                            class="flex items-center ml-2 break-words font-medium leading-5"
+                            [class.text-primary]="isFilterFor(tag)"
+                            [class.text-warn]="isFilterOut(tag)">
+                            <ng-container *transloco="let t">
+                                {{tag.value | titlecase}}
+                            </ng-container>
+                        </div>
+                        <mat-menu #filterMenu="matMenu">
+                            <button
+                                mat-menu-item
+                                class="break-words font-medium leading-5"
+                                [class.text-primary]="isFilterFor(tag)"
+                                (click)="setFilterFor(tag)">
+                                <ng-container *transloco="let t">
+                                    {{t('Filter-for')}}
+                                </ng-container>
+                            </button>
+                            <button
+                                mat-menu-item
+                                class="break-words font-medium leading-5"
+                                [class.text-warn]="isFilterOut(tag)"
+                                (click)="setFilterOut(tag)">
+                                <ng-container *transloco="let t">
+                                    {{t('Filter-out')}}
+                                </ng-container>
+                            </button>
+                            <button
+                                mat-menu-item
+                                class="break-words font-medium leading-5"
+                                (click)="removeTag(tag)">
+                                <ng-container *transloco="let t">
+                                    {{t('Clear')}}
+                                </ng-container>
+                            </button>
+                        </mat-menu>
+                    </div>
+                    
+                </ng-container>
+                
+                <!--
+                <ng-container *ngFor="let act of filterValues['Activity']">
+                    <div
+                        class="grid grid-cols-4 gap-1 items-center justify-left px-4 py-3 rounded-full ring-inset bg-hover"
+                        [class.ring-2]="filter['custom'].includes('Actividade:'+act) || filter['custom'].includes('NOT Actividade:'+act)"
+                        [class.ring-primary]="filter['custom'].includes('Actividade:'+act)"
+                        [class.ring-warn]="filter['custom'].includes('NOT Actividade:'+act)"
+                        matTooltip='{{act}}'
+                        [ngClass]="'theme-default'"
+                        >
+                        
+                        <div
+                            class="col-span-3 ml-2.5 font-medium leading-5"
+                            [class.text-primary]="filter['custom'].includes('Actividade:'+act)"
+                            [class.text-warn]="filter['custom'].includes('NOT Actividade:'+act)">
+                            {{act}}
+                        </div>
+
+                        <div>
+                            <button
+                                mat-icon-button
+                                [matMenuTriggerFor]="summaryMenu">
+                                <mat-icon
+                                    class="icon-size-5"
+                                    [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+                            </button>
+                            <mat-menu #summaryMenu="matMenu">
+                                <button
+                                mat-menu-item
+                                [class.text-primary]="filter['custom'].includes('Actividade:'+act)"
+                                (click)="setCustom('Actividade:'+act)"
+                                ><ng-container *transloco="let t">
+                                    {{t('Filter-for')}}
+                                </ng-container></button>
+                                <button
+                                mat-menu-item
+                                [class.text-warn]="filter['custom'].includes('NOT Actividade:'+act)"
+                                (click)="setCustom('NOT Actividade:'+act)"
+                                ><ng-container *transloco="let t">
+                                    {{t('Filter-out')}}
+                                </ng-container></button>
+                            </mat-menu>
+                        </div>
+
+                    </div>
+                </ng-container>
+                -->
+            </div>
+
+            <hr class="my-8">
+
+             <!-- Group & Not Group -->
+             <div class="text-md font-semibold text-secondary">
+                <ng-container *transloco="let t">
+                    {{t('Group') | uppercase}}
+                </ng-container>
+             </div>
+             <div class="grid grid-cols-2 sm:grid-cols-2 gap-3 mt-6">    
+                 <!-- Group -->
+                 <div
+                     class="flex items-center py-3 pl-5 pr-6 rounded-full cursor-pointer ring-inset ring-primary bg-hover"
+                     [class.ring-2]="filter['custom'].includes('VendasGrupo:Grupo')"
+                     [ngClass]="'theme-default'"
+                     matTooltip="Automatically filters for 'Group' data."
+                     (click)="setCustom('VendasGrupo:Grupo')">
+                     <!--
+                     <ng-container>
+                         <div
+                             class="flex-0 w-3 h-3 rounded-full"
+                             [ngStyle]="{'background-color':config.colors['sales']['group']}"
+                         ></div>
+                     </ng-container>
+                     -->
+                     <mat-icon
+                         [ngStyle]="{'color':config.colors['sales']['group']}"
+                         svgIcon="mat_outline:group">
+                     </mat-icon>
+                     <div
+                         class="flex items-center ml-2 font-medium leading-5"
+                         [class.text-primary]="filter['custom'].includes('VendasGrupo:Grupo')">
+                         <ng-container *transloco="let t">
+                            {{t('Group')}}
+                        </ng-container>
+                     </div>
+                 </div>
+                 <!-- Not Group -->
+                 <div
+                     class="flex items-center py-3 pl-5 pr-6 rounded-full cursor-pointer ring-inset ring-primary bg-hover"
+                     [class.ring-2]="filter['custom'].includes('VendasGrupo:Não Grupo')"
+                     [ngClass]="'theme-default'"
+                     (click)="setCustom('VendasGrupo:Não Grupo')">
+                     <!--
+                     <div
+                         class="flex-0 w-3 h-3 rounded-full"
+                         [ngStyle]="{'background-color':config.colors['sales']['notgroup']}"
+                     ></div>
+                     -->
+                     <mat-icon
+                         [ngStyle]="{'color':config.colors['sales']['notgroup']}"
+                         svgIcon="mat_outline:group_off">
+                     </mat-icon>
+                     <div
+                         class="flex items-center ml-2 font-medium leading-5"
+                         [class.text-primary]="filter['custom'].includes('VendasGrupo:Não Grupo')">
+                         <ng-container *transloco="let t">
+                            {{t('Not-group')}}
+                        </ng-container>
+                     </div>
+                 </div>
+             </div>
+ 
+             <hr class="my-8">
+
+            <!-- Items & Services -->
+            <div class="text-md font-semibold text-secondary">
+                <ng-container *transloco="let t">
+                    {{t('Items') | uppercase}}
+                </ng-container>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-2 gap-3 mt-6">    
+                <!-- Item -->
+                <div
+                    class="flex items-center py-3 pl-5 pr-6 rounded-full cursor-pointer ring-inset ring-primary bg-hover"
+                    [class.ring-2]="filter['custom'].includes('TipoArtigoServico:A')"
+                    [ngClass]="'theme-default'"
+                    matTooltip="Automatically filters for 'Item' data."
+                    (click)="setCustom('TipoArtigoServico:A')">
+                    <!--
+                    <ng-container>
+                        <div
+                            class="flex-0 w-3 h-3 rounded-full"
+                            [ngStyle]="{'background-color':config.colors['sales']['group']}"
+                        ></div>
+                    </ng-container>
+                    -->
+                    <mat-icon
+                        [ngStyle]="{'color':config.colors['sales']['item']}"
+                        svgIcon="mat_outline:inventory_2">
+                    </mat-icon>
+                    <div
+                        class="flex items-center ml-2 font-medium leading-5"
+                        [class.text-primary]="filter['custom'].includes('TipoArtigoServico:A')">
+                        <ng-container *transloco="let t">
+                            {{t('Item')}}
+                        </ng-container>
+                    </div>
+                </div>
+                <!-- Service -->
+                <div
+                    class="flex items-center py-3 pl-5 pr-6 rounded-full cursor-pointer ring-inset ring-primary bg-hover"
+                    [class.ring-2]="filter['custom'].includes('TipoArtigoServico:S')"
+                    [ngClass]="'theme-default'"
+                    matTooltip="Automatically filters for 'Item' data."
+                    (click)="setCustom('TipoArtigoServico:S')">
+                    <!--
+                    <ng-container>
+                        <div
+                            class="flex-0 w-3 h-3 rounded-full"
+                            [ngStyle]="{'background-color':config.colors['sales']['group']}"
+                        ></div>
+                    </ng-container>
+                    -->
+                    <mat-icon
+                        [ngStyle]="{'color':config.colors['sales']['service']}"
+                        svgIcon="mat_outline:design_services">
+                    </mat-icon>
+                    <div
+                        class="flex items-center ml-2 font-medium leading-5"
+                        [class.text-primary]="filter['custom'].includes('TipoArtigoServico:S')">
+                        <ng-container *transloco="let t">
+                            {{t('Service')}}
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-8">
+
+            <div class="text-md font-semibold text-secondary">
+                <ng-container *transloco="let t">
+                    {{t('Currency')}}
+                </ng-container>
+            </div>
+            <div class="grid grid-cols-3 gap-3 justify-items-start mt-6">
+                <!-- Euro -->
+                <div
+                    class="flex items-center py-3 pl-5 pr-6 rounded-full cursor-pointer ring-inset ring-primary bg-hover"
+                    [class.ring-2]="filter['currency']['code'] == 'EUR'"
+                    matTooltip="Automatically sets the scheme based on user's operating system's color scheme preference using 'prefer-color-scheme' media query."
+                    (click)="setCurrency('EUR')">
+                    <div class="flex items-center rounded-full overflow-hidden">
+                        <mat-icon
+                            class="icon-size-5"
+                            [ngStyle]="{'color':'teal'}"
+                            [svgIcon]="'mat_outline:euro'"></mat-icon>
+                    </div>
+                    <div
+                        class="flex items-center ml-2 font-medium leading-5"
+                        [class.text-primary]="filter['currency']['code'] == 'EUR'">
+                        EUR
+                    </div>
+                </div>
+                <!-- Dollar -->
+                <div
+                    class="flex items-center py-3 pl-5 pr-6 rounded-full cursor-pointer ring-inset ring-primary bg-hover"
+                    [class.ring-2]="filter['currency']['code'] == 'USD'"
+                    matTooltip="Automatically sets the scheme based on user's operating system's color scheme preference using 'prefer-color-scheme' media query."
+                    (click)="setCurrency('USD')">
+                    <div class="flex items-center rounded-full overflow-hidden">
+                        <mat-icon
+                            class="icon-size-5"
+                            [ngStyle]="{'color':'teal'}"
+                            [svgIcon]="'mat_outline:attach_money'"></mat-icon>
+                    </div>
+                    <div
+                        class="flex items-center ml-2 font-medium leading-5"
+                        [class.text-primary]="filter['currency']['code'] == 'USD'">
+                        USD
+                    </div>
+                </div>
+                <!-- Kwanza-->
+                <div
+                    class="flex items-center py-3 pl-5 pr-6 rounded-full cursor-pointer ring-inset ring-primary bg-hover"
+                    [class.ring-2]="filter['currency']['code'] == 'AOA'"
+                    matTooltip="Automatically sets the scheme based on user's operating system's color scheme preference using 'prefer-color-scheme' media query."
+                    (click)="setCurrency('AOA')">
+                    <div class="flex items-center rounded-full overflow-hidden">
+                        <span
+                            [ngStyle]="{'color':'teal'}"
+                            class="icon-size-2">Kz</span>
+                    </div>
+                    <div
+                        class="flex items-center ml-2 font-medium leading-5"
+                        [class.text-primary]="filter['currency']['code'] == 'AOA'">
+                        AOA
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-8">
+
+            <div class="text-md font-semibold text-secondary">
+                <ng-container *transloco="let t">
+                    {{t('Date')}}
+                </ng-container>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-2 gap-3 mt-6">
+                <!-- This Year -->
+                <div
+                    class="flex items-center justify-center px-4 py-3 rounded-full cursor-pointer ring-inset ring-primary bg-hover"
+                    [class.ring-2]="filter['dateTime']['selected']=='Y'"
+                    matTooltip="Automatically sets the scheme based on user's operating system's color scheme preference using 'prefer-color-scheme' media query."
+                    (click)="setDateTime('Y')">
+                    <div
+                        class="flex-0 w-3 h-3 rounded-full bg-cyan-500"
+                    ></div>
+                    <div
+                        class="ml-2.5 font-medium leading-5 truncate"
+                        [class.text-primary]="filter['dateTime']['selected']=='Y'">
+                        This Year
+                    </div>
+                </div>
+                <!-- Last Year -->
+                <div
+                    class="flex items-center justify-center px-4 py-3 rounded-full cursor-pointer ring-inset ring-primary bg-hover"
+                    [class.ring-2]="filter['dateTime']['selected']=='1Y'"
+                    matTooltip="Automatically sets the scheme based on user's operating system's color scheme preference using 'prefer-color-scheme' media query."
+                    (click)="setDateTime('1Y')">
+                    <div
+                        class="flex-0 w-3 h-3 rounded-full bg-cyan-500"
+                    ></div>
+                    <div
+                        class="flex items-center ml-2 font-medium leading-5"
+                        [class.text-primary]="filter['dateTime']['selected']=='1Y'">
+                        Last Year
+                    </div>
+                </div>
+                <!-- This Month -->
+                <div
+                    class="flex items-center justify-center px-4 py-3 rounded-full cursor-pointer ring-inset ring-primary bg-hover"
+                    [class.ring-2]="filter['dateTime']['selected']=='M'"
+                    matTooltip="Automatically sets the scheme based on user's operating system's color scheme preference using 'prefer-color-scheme' media query."
+                    (click)="setDateTime('M')">
+                    <div
+                        class="flex-0 w-3 h-3 rounded-full bg-cyan-500"
+                    ></div>
+                    <div
+                        class="flex items-center ml-2 font-medium leading-5"
+                        [class.text-primary]="filter['dateTime']['selected']=='M'">
+                        This Month
+                    </div>
+                </div>
+                <!-- Last Month -->
+                <div
+                    class="flex items-center justify-center px-4 py-3 rounded-full cursor-pointer ring-inset ring-primary bg-hover"
+                    [class.ring-2]="filter['dateTime']['selected']=='1M'"
+                    matTooltip="Automatically sets the scheme based on user's operating system's color scheme preference using 'prefer-color-scheme' media query."
+                    (click)="setDateTime('1M')">
+                    <div
+                        class="flex-0 w-3 h-3 rounded-full bg-cyan-500"
+                    ></div>
+                    <div
+                        class="flex items-center ml-2 font-medium leading-5"
+                        [class.text-primary]="filter['dateTime']['selected']=='1M'">
+                        Last Month
+                    </div>
+                </div>
+                
+            </div>
+            
+            <hr class="my-8">
+
+            <!-- Theme -->
+            <div class="text-md font-semibold text-secondary">THEME</div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6">
+                <ng-container *ngFor="let theme of config.themes">
+                    <div
+                        class="flex items-center justify-center px-4 py-3 rounded-full cursor-pointer ring-inset ring-primary bg-hover"
+                        [class.ring-2]="config.theme === theme.id"
+                        [ngClass]="theme.id"
+                        (click)="setTheme(theme.id)">
+                        <div
+                            class="flex-0 w-3 h-3 rounded-full bg-primary"
+                        ></div>
+                        <div
+                            class="ml-2.5 font-medium leading-5 truncate"
+                            [class.text-primary]="config.theme !== theme.id">
+                            {{theme.name}}
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+
+            <hr class="my-8">
+
+            <!-- Scheme -->
+            <div class="text-md font-semibold text-secondary">SCHEME</div>
+            <div class="grid grid-cols-3 gap-3 justify-items-start mt-6">
+                <!-- Auto -->
+                <div
+                    class="flex items-center py-3 pl-5 pr-6 rounded-full cursor-pointer ring-inset ring-primary bg-hover"
+                    [class.ring-2]="config.scheme === 'auto'"
+                    matTooltip="Automatically sets the scheme based on user's operating system's color scheme preference using 'prefer-color-scheme' media query."
+                    (click)="setScheme('auto')">
+                    <div class="flex items-center rounded-full overflow-hidden">
+                        <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:lightning-bolt'"></mat-icon>
+                    </div>
+                    <div
+                        class="flex items-center ml-2 font-medium leading-5"
+                        [class.text-primary]="config.scheme !== 'auto'">
+                        Auto
+                    </div>
+                </div>
+                <!-- Dark -->
+                <div
+                    class="flex items-center py-3 pl-5 pr-6 rounded-full cursor-pointer ring-inset ring-primary bg-hover"
+                    [class.ring-2]="config.scheme === 'dark'"
+                    (click)="setScheme('dark')">
+                    <div class="flex items-center rounded-full overflow-hidden">
+                        <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:moon'"></mat-icon>
+                    </div>
+                    <div
+                        class="flex items-center ml-2 font-medium leading-5"
+                        [class.text-primary]="config.scheme !== 'dark'">
+                        Dark
+                    </div>
+                </div>
+                <!-- Light -->
+                <div
+                    class="flex items-center py-3 pl-5 pr-6 rounded-full cursor-pointer ring-inset ring-primary bg-hover"
+                    [class.ring-2]="config.scheme === 'light'"
+                    (click)="setScheme('light')">
+                    <div class="flex items-center rounded-full overflow-hidden">
+                        <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:sun'"></mat-icon>
+                    </div>
+                    <div
+                        class="flex items-center ml-2 font-medium leading-5"
+                        [class.text-primary]="config.scheme !== 'light'">
+                        Light
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-8">
+
+            <div class="grid grid-cols-1 gap-1 mt-6">
+                <!-- Reset -->
+                <button
+                    mat-flat-button
+                    [color]="'primary'"
+                    matTooltip="Resets filter."
+                    (click)="reset()">
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:x-circle'"></mat-icon>
+                        <span class="ml-2">
+                            Reset
+                        </span>
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</fuse-drawer>
