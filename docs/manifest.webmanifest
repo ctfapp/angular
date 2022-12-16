@@ -1,6 +1,6 @@
 {
-  "name": "fuse",
-  "short_name": "fuse",
+  "name": "Navigator Analytics",
+  "short_name": "Nav",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",
