@@ -1,7 +1,7 @@
 {
   "name": "Navigator Analytics",
   "short_name": "Nav",
-  "theme_color": "#1976d2",
+  "theme_color": "#4f46e5",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "./",
